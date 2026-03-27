@@ -1,5 +1,6 @@
 import type {SoundcloudTrack, SoundcloudTranscoding} from "../types"
 import * as fs from "fs"
+import * as os from "os"
 import * as path from "path"
 import {ID3Writer} from "browser-id3-writer"
 import {API} from "../API"
@@ -138,7 +139,7 @@ export class Util {
         const client_id = await this.api.getClientId()
         const connect = transcoding.url.includes("?") ? `&client_id=${client_id}` : `?client_id=${client_id}`
         const m3uLink = await fetch(transcoding.url + connect, {headers: this.api.headers}).then(r => r.json()).then(r => r.url)
-        const destDir = path.join(__dirname, `tmp_${temp++}`)
+        const destDir = path.join(os.tmpdir(), "soundcloud.ts", `tmp_${temp++}`)
         if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, {recursive: true})
         const output = path.join(destDir, `out.${transcoding.type}`)
 
